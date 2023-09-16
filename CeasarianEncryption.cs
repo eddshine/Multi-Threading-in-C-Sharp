@@ -9,63 +9,10 @@ Code, Compile, Run and Debug online from anywhere in world.
 using System;
 using System.Threading;
 using System.Collections.Generic;
+using System.Collections;
 class HelloWorld {
 
-  public static Dictionary<string, string> cypher = new Dictionary<string, string>(){
-	{"A", "B"},
-	{"B", "C"},
-	{"C", "D"},
-    {"D", "E"},
-    {"E", "F"},
-    {"F", "G"},
-    {"G", "H"},
-    {"H", "I"},
-    {"I", "J"},
-    {"J", "K"},
-    {"K", "L"},
-    {"L", "M"},
-    {"M", "N"},
-    {"N", "O"},
-    {"O", "P"},
-    {"P", "Q"},
-    {"Q", "R"},
-    {"R", "S"},
-    {"S", "T"},
-    {"T", "U"},
-    {"U", "V"},
-    {"V", "W"},
-    {"W", "X"},
-    {"X", "Y"},
-    {"Y", "Z"},
-    {"Z", "A"},
-    {"a", "b"},
-	{"b", "c"},
-	{"c", "d"},
-    {"d", "e"},
-    {"e", "f"},
-    {"f", "g"},
-    {"g", "h"},
-    {"h", "i"},
-    {"i", "j"},
-    {"j", "k"},
-    {"k", "l"},
-    {"l", "m"},
-    {"m", "n"},
-    {"n", "o"},
-    {"o", "p"},
-    {"p", "q"},
-    {"q", "r"},
-    {"r", "s"},
-    {"s", "t"},
-    {"t", "u"},
-    {"u", "v"},
-    {"v", "w"},
-    {"w", "x"},
-    {"x", "y"},
-    {"y", "z"},
-    {"z", "a"}
-  };
-    
+ public static ArrayList alphabets = new ArrayList() {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
     
   public static string encryptText;
   static void Main() {
@@ -80,25 +27,46 @@ class HelloWorld {
   }
   
   static void encrypt(string character) {
-    char[] ch = new char[character.Length];
-    for (int i = 0; i < character.Length; i++) { 
-            ch[i] = char.Parse(cypher[Char.ToString(character[i])]);
-            //Console.WriteLine(cypher[Char.ToString(character[i])]);
+    var encryptedText = new ArrayList();
+    for (int i = 0; i < character.Length; i++) {
+        if(string.IsNullOrWhiteSpace(character[i].ToString())) {
+            encryptedText.Add(" ");
+        }else {
+            // encryptedText.Add(alphabets[(alphabets.IndexOf(character[i].ToString().ToUpper()) + 3) % 26]);
+            int index = alphabets.IndexOf(character[i].ToString().ToUpper());
+            if (index >= 0) {
+                encryptedText.Add(alphabets[(index + 3) % 26]);
+            } else {
+                encryptedText.Add(character[i]);
+            }
+        }
     }
     
-    string encryptedText = new string(ch);
-    encryptText = encryptedText;
-    Console.WriteLine("Encryted Text: {0}", encryptedText);
+    string getEncryptedString = string.Join("", encryptedText.ToArray());
+    encryptText = getEncryptedString;
+    Console.WriteLine("Encryted Text: {0}", getEncryptedString);
   }
   
   static void decrypt() {
-     char[] ch = new char[encryptText.Length];
-    for (int i = 0; i < encryptText.Length; i++) { 
-            ch[i] = char.Parse(cypher[Char.ToString(encryptText[i])]);
-            //Console.WriteLine(cypher[Char.ToString(encryptText[i])]);
+    var decryptedText = new ArrayList();
+    for (int i = 0; i < encryptText.Length; i++) {
+        if(string.IsNullOrWhiteSpace(encryptText[i].ToString())) {
+            decryptedText.Add(" ");
+        }else {
+            // decryptedText.Add(alphabets[(alphabets.IndexOf(encryptText[i].ToString().ToUpper()) - 3) % 26]);
+            int index = alphabets.IndexOf(encryptText[i].ToString().ToUpper());
+
+            int getNewIndex = (index - 3) % 26;
+            if(getNewIndex < 0) {
+                int newIndex = 26 - (getNewIndex * -1);
+                decryptedText.Add(alphabets[newIndex]);
+            } else {
+                decryptedText.Add(alphabets[getNewIndex]);
+            }
+        }
     }
     
-    string decryptedText = new string(ch);
-    Console.WriteLine("Decrypted Text: {0}", decryptedText);
+    string getDecryptedString = string.Join("", decryptedText.ToArray());
+    Console.WriteLine("Decryted Text: {0}", getDecryptedString);
   }
 }
