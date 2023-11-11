@@ -1,0 +1,61 @@
+using System;
+
+class Program {
+
+    private static long getKey(long a, long b, long P)
+    {
+        if (b == 1)
+            return a;
+        else
+            return Power(a, b, P);
+    }
+
+    private static long Power(long a, long b, long P)
+    {
+        if (b == 0)
+            return 1;
+  
+        long temp = Power(a, b / 2, P) % P;
+        temp = (temp * temp) % P;
+  
+        if (b % 2 == 0)
+            return temp;
+        else
+            return (a * temp) % P;
+    }
+
+    public static void Main() {
+        long P, G, x, a, y, b, ka, kb;
+        string user_1, user_2;
+
+        Console.WriteLine("Enter key P: ");
+        P = long.Parse(Console.ReadLine());
+
+        Console.WriteLine("Enter key G: ");
+        G = long.Parse(Console.ReadLine());
+
+        Console.WriteLine("Enter user 1: ");
+        user_1 = Console.ReadLine();
+
+        Console.WriteLine("Enter user 2: ");
+        user_2 = Console.ReadLine();
+
+        Console.WriteLine("Enter Private Key for " + user_1);
+        a = long.Parse(Console.ReadLine());
+
+        Console.WriteLine("Enter Private Key for " + user_2);
+        b = long.Parse(Console.ReadLine());
+
+        x = getKey(G, a, P);
+        y = getKey(G, b, P);
+
+        Console.WriteLine(user_1 + " generated key: " + x);
+        Console.WriteLine(user_2 + " generated key: " + y);
+
+        ka = getKey(y, a, P);
+        kb = getKey(x, b, P);
+
+        Console.WriteLine("Generated Secret Key for " + user_1 + ": " + ka);
+        Console.WriteLine("Generated Secret Key for " + user_2 + ": " + kb);
+    }
+}
